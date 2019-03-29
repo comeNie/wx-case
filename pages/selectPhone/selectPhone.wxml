@@ -1,0 +1,24 @@
+<view class="main">
+    <view class="brand">
+        <scroll-view scrollY class="scroll-view_H" style="width: 100%;height:100%;">
+            <view bindtap="doSelectBrand" class="{{brand_id==item.brand_id?'active mobile_btn':'mobile_btn'}}" data-brand_id="{{item.brand_id}}" data-brand_name="{{item.brand_name}}" wx:for="{{brandsList}}" wx:key="index">
+                <view>{{item.brand_name}}</view>
+            </view>
+        </scroll-view>
+    </view>
+    <view class="right">
+        <scroll-view scrollY class="scroll-view_H" style="width: 100%;height:90%;">
+            <view class="box clearfix" wx:for="{{seriesPhoneList}}" wx:for-item="arr" wx:key="index">
+                <view class="list_t">{{arr.series_name}}</view>
+                <view class="list_c">
+                    <view bindtap="doSelectPhone" class="item" data-phone_id="{{item.phone_id}}" data-phone_name="{{item.phoneName}}" wx:for="{{arr.phoneList}}" wx:key="index">
+            {{item.phoneName}}
+        </view>
+                </view>
+            </view>
+        </scroll-view>
+        <view class="btn_box">
+            <view bindtap="lackPhone" class="btn">未找到机型？</view>
+        </view>
+    </view>
+</view>

@@ -1,0 +1,50 @@
+<!--pages/index/index.wxml-->
+
+<view class="container">
+
+    <view class="touchBox">
+    
+        <view class="mask cavansBox" style="width:{{maskWidth}}rpx;height:{{maskHeight}}rpx;border-radius:{{maskRadius}}rpx;">
+            <view class="photoBox" style="transition:{{transition}}; transform:translate({{deltaX}}px, {{deltaY}}px) rotate({{angle}}deg) scale({{scale}});">
+                <image class="photo" src="{{photo}}" style="width:{{width}}rpx;height:{{height}}rpx;"></image>
+            </view>
+        </view>
+
+        <view class="mask" style="width:{{maskWidth}}rpx;height:{{maskHeight}}rpx;">
+            <image class="coverImg" src="{{maskImg}}"></image>
+
+            <view class="shape" style="width:{{maskSizeRatio * item.w}}rpx;height:{{maskSizeRatio * item.h}}rpx;left:{{maskWidth / 2 + item.x * maskSizeRatio - item.w / 2 * maskSizeRatio}}rpx;top:{{maskHeight / 2 + item.y * maskSizeRatio - item.h / 2 * maskSizeRatio}}rpx" wx:for="{{shapes}}" wx:key="index">
+                <image class="shapeImg" src="{{item.path}}"></image>
+            </view>
+        </view>
+
+        <view class="moveBox"
+            bindtouchstart="startTouch" 
+            bindtouchmove="moveTouch" 
+            bindtouchend="endTouch" 
+            bindtouchcancel="cancelTouch" 
+            bindtap="tapTouch">
+        </view>
+
+    </view>
+
+    <view style="width:100%;">
+        <view class="toolbar">
+            <image class="icon" src="../../images/phone.png"></image>
+            <text bindtap="setPhone" class="toolbar_text">换机型</text>
+            <image bindtap="setPhone" class="icon" src="../../images/next@3x.png"></image>
+            <view bindtap="setPhone" class="phone_name" style="">{{phoneName}}</view>
+            <view bindtap="openDialog" class="next_btn">完成</view>
+        </view>
+    </view>
+
+    <view style="width:100%;">
+        
+        <view style="display:flex;align-items:center;padding:10rpx 20rpx;">
+            <view bindtap="chooseImg" class="scroll-img-item">
+                <image src="../../images/upload@3x.png"></image>
+            </view>
+        </view>
+    </view>
+
+</view>

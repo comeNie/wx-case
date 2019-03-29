@@ -1,0 +1,110 @@
+<view class="main">
+    <view bindtap="toweb" class="alert" wx:if="{{notification!=''}}">
+        <image class="img_icons" src="../../images/assets/icon_inform.png"></image>{{notification.title}}
+<image class="arrow" mode="widthFix" src="../../images/assets/next@3x.png"></image>
+    </view>
+    <swiper class="swiper" indicatorActiveColor="{{indicatorDots_color}}" indicatorDots="{{indicatorDots}}">
+        <swiper-item wx:for="{{goods.works_desc_pic}}">
+            <image bindload="hide" class="desc_pic" mode="widthFix" src="{{item}}"></image>
+        </swiper-item>
+    </swiper>
+    <view style="background-color:#fff">
+        <view class="goods_box">
+            <view class="good_info">
+                <view class="good_head">
+                    <view class="good_n">{{goods.works_name}}</view>
+                </view>
+            </view>
+        </view>
+        <view bindtap="setMaterial" class="list">
+            <view class="list-item">
+                <view class="label" wx:if="{{isSelect}}">
+                    已选择“{{phoneName}}”“{{material_type}}”“{{inner_color.color}}”
+                </view>
+                <view class="label" wx:else>请选择材质</view>
+                <image class="img_icons" src="../../images/icons/right.png"></image>
+            </view>
+        </view>
+        <view class="count_box">
+            <view>购买数量</view>
+            <view class="btn_group">
+                <view bindtap="minus" class="btn minus_btn">-</view>
+                <view class="text">{{count}}</view>
+                <view bindtap="add" class="btn add_btn">+</view>
+            </view>
+        </view>
+    </view>
+    <view bindtap="setAddress" class="address_box" data-addressId="{{address.id}}" wx:if="{{hasAddress}}">
+        <view class="haveAddress">
+            <view class="info">
+                <image class="img_icons" src="../../images/icons/address.png"></image>
+                <view class="name">{{address.userName}}</view>
+                <view class="phoneNumber">
+                    <view class="">{{address.telNumber}}</view>
+                    <view class="defa_icon" wx:if="{{address.is_default==1}}">默认</view>
+                </view>
+            </view>
+            <view class="address">
+                <view class="address_info">
+                    {{address.provinceName}}{{address.cityName}}{{address.countryName}}{{address.detailInfo}}
+                </view>
+            </view>
+        </view>
+        <image class="img_icons" src="../../images/icons/right.png"></image>
+    </view>
+    <view bindtap="setAddress" class="address_box" wx:if="{{!hasAddress}}">
+        <view class="noAddress">
+            <image src="../../images/icons/plus.png"></image>
+            <view class="classname">添加收货地址</view>
+        </view>
+    </view>
+    <view class="tips">
+        <view class="tips_title">{{declare.title}}</view>
+        <view class="line" wx:for="{{declare.content}}">
+            <view class="dot">•</view>
+            <view>{{item}}</view>
+        </view>
+    </view>
+    <view style="background:#fff" wx:if="{{hasComment}}">
+        <view bindtap="commentpage" class="showLine" style="border-bottom:1px solid #f2f2f2">
+            <view class="avater_list">
+                <image src="{{item.headimgurl}}" style="{{index==0?'margin-left:0;':''}}" wx:for="{{commentData}}"></image>
+            </view>
+            <view style="display:flex;margin-left:auto;">
+                有{{totals}}人晒单
+                <image class="img_icons" src="../../images/icons/right.png"></image>
+            </view>
+        </view>
+        <view style="background:#fff">
+            <view class="showLine userinfo">
+                <view style="display:flex;align-items:center;">
+                    <image class="avater" src="{{commentData[0].headimgurl}}"></image>
+                    <view>{{commentData[0].username}}</view>
+                </view>
+            </view>
+            <view class="commit">{{commentData[0].comments}}</view>
+            <view class="showImg">
+                <image bindtap="checkBigImg" data-img="{{item}}" mode="aspectFill" src="{{item}}" wx:for="{{commentData[0].pics}}"></image>
+            </view>
+        </view>
+        <view bindtap="commentpage" class="more">
+            <view class="more_btn">查看更多</view>
+        </view>
+    </view>
+    <view style="margin-top:10px;">
+        <image mode="widthFix" src="{{item}}" style="width:100%" wx:for="{{description_pic}}"></image>
+    </view>
+    <view class="footer">
+        <label class="service" for="btn">
+            <image class="img_icons" src="../../images/assets/service_btn@3x.png"></image>
+            <view>客服</view>
+        </label>
+        <button id="btn" openType="contact" sessionFrom="{{user_id}}" size="mini" style="display:none" type="default"></button>
+        <view class="pay_info">
+                共{{count}}件商品(包邮)，合计: <span style="color:#E44217;font-size:35rpx;">¥{{count*price}}</span>
+        </view>
+        <form bindsubmit="formSubmit" class="pay_btn" reportSubmit="true">
+            <button class="create-btn" formType="submit">去付款</button>
+        </form>
+    </view>
+</view>

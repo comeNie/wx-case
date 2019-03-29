@@ -1,0 +1,116 @@
+
+page {
+  min-height: 100%;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  word-break: break-all;
+}
+
+.canvas{ position: absolute; left: -6000px; top: -6000px; }
+
+.touchBox { 
+  width: 100%; 
+  height: 75%; 
+  position: relative; 
+}
+
+.mask {
+  position: absolute; 
+  left: 50%; 
+  top: 50%; 
+  -webkit-transform: translate(-50%,-50%); 
+  transform: translate(-50%,-50%);
+}
+
+.coverImg {
+  width:100%; 
+  height:100%; 
+  position:absoulate; 
+  left: 0; 
+  top: 0;
+  z-index: 999;
+}
+
+.cavansBox{ 
+  overflow: hidden; 
+}
+
+.photoBox {
+  position: absolute; 
+  left: 0; 
+  top: 0; 
+  -webkit-transform:translate(0,0); 
+  transform:translate(0,0);
+}
+
+.moveBox { 
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+}
+
+.shape {
+  position: absolute;
+  z-index: 9999;
+}
+.shapeImg {
+  width: 100%;
+  height: 100%;
+  display: block;
+ }
+
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 20rpx;
+}
+
+.icon{ 
+  width: 11px;
+  height: 14px; 
+  margin-right: 10px; 
+}
+
+.toolbar_text { 
+  font-size: 14px;
+  color: #141414; 
+  margin-right: 10px; 
+}
+
+.phone_name{
+  flex: auto;
+  font-size: 14px;
+  color: #141414;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.next_btn{ 
+  font-size: 14px; 
+  color: #141414; 
+  padding: 7rpx 40rpx;
+  background: #FCF164;
+  border-radius: 14px;
+  text-align: center;
+  margin-left:auto; 
+}
+
+
+.scroll-img-item{
+  display:inline-block;
+  width:150rpx;
+  height:150rpx;
+  margin-right:20rpx;
+  background:#D8D8D8; 
+  border-radius:6px;
+  overflow:hidden;
+  position: relative;
+}
+
+.scroll-img-item wx-image{ width: 100%; height: 100%; display: block; position: absolute; left: 50%; top: 50%; -webkit-transform: translate(-50%,-50%); transform: translate(-50%,-50%); }
+
