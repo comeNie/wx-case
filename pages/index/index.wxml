@@ -1,5 +1,8 @@
 <view class="container">
-<button bindtap="toDesign">开始设计</button>
+
+<button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="toDesign">
+  开始设计
+</button>
 
 <button bindtap="toDesign2">开始设计2</button>
 

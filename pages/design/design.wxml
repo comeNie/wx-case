@@ -34,7 +34,7 @@
             <text bindtap="setPhone" class="toolbar_text">换机型</text>
             <image bindtap="setPhone" class="icon" src="../../images/next@3x.png"></image>
             <view bindtap="setPhone" class="phone_name" style="">{{phoneName}}</view>
-            <view bindtap="genDesignImg" class="next_btn">完成</view>
+            <view bindtap="draw" class="next_btn">完成</view>
         </view>
     </view>
 

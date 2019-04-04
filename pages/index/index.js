@@ -1,4 +1,7 @@
 // pages/index/index.js
+let globalData = getApp().globalData;
+let thisApp = getApp();
+
 Page({
 
     /**
@@ -13,6 +16,10 @@ Page({
      */
     onLoad: function (options) {
 
+        var thisPage = this;
+        console.log(options);
+
+        
     },
 
     /**
@@ -64,11 +71,25 @@ Page({
 
     },
 
-    toDesign: function () {
-        wx.navigateTo({
-            url: "../../pages/selectPhone/selectPhone"
-        });
+    toDesign: function(userRes) {
+        // console.log(userRes);
+        // "{"nickName":"飞","gender":1,"language":"zh_CN","city":"","province":"","country":"阿尔及利亚","avatarUrl":"https://wx.qlogo.cn/mmopen/vi_32/gReakaPaF7gibh22tsQper5QD8AAky76icK0ED3PmnMPZ4BnHPqfibXHd7GmeyKPpEyRHwJZibNYE024r1gMRPlTHA/132"}"
+        if (globalData.userInfo == null) {
+            thisApp.callApi("https://www.91shoujike.com/api/user/update", userRes.detail.userInfo, function(res) {
+                globalData.userInfo = userRes.detail.userInfo;
+                wx.navigateTo({
+                    url: "../../pages/selectPhone/selectPhone"
+                });
+            });
+        } else {
+            wx.navigateTo({
+                url: "../../pages/selectPhone/selectPhone"
+            });
+        }
+        
+        
     },
+
     toCreateOrder: function () {
         wx.navigateTo({
             url: "../../pages/createOrder/createOrder"
@@ -79,4 +100,5 @@ Page({
             url: "../../pages/design3/design3"
         });
     },
+
 })

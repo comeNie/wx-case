@@ -1,5 +1,6 @@
 // pages/index/index.js
 import WxTouch from "../../utils/wx-touch.js";
+let thisApp = getApp();
 let globalData = getApp().globalData;
 let store = {};
 
@@ -17,6 +18,8 @@ Page({
         shapes: [],
         canvasWidth: 0,
         canvasHeight: 0,
+        designId: 0,
+        photoId: 0,
         photo: "",
         width: 0,
         height: 0,
@@ -180,12 +183,31 @@ Page({
         }
         photoWidthInit = photoWidthInit * 1.1;
         photoHeightInit = photoHeightInit * 1.1;
+        var photoLeftInit = (photoWidthInit - thisPage.data.maskWidth) / -2;
+        var photoTopInit = (photoHeightInit - thisPage.data.maskHeight) / -2;
         thisPage.setData({
             width: photoWidthInit,
             height: photoHeightInit,
-            deltaX: (photoWidthInit - thisPage.data.maskWidth) / -2 * globalData.rpxRatio,
-            deltaY: (photoHeightInit - thisPage.data.maskHeight) / -2 * globalData.rpxRatio,
+            deltaX: photoLeftInit * globalData.rpxRatio,
+            deltaY: photoTopInit * globalData.rpxRatio,
         });
+
+        //upload photo
+        var photoPostData = {};
+        photoPostData.width = thisPage.data.width;
+        photoPostData.height = thisPage.data.height;
+        photoPostData.left = thisPage.data.deltaX;
+        photoPostData.top = thisPage.data.deltaY;
+        photoPostData.angle = thisPage.data.angle;
+        photoPostData.scale = thisPage.data.scale;
+        // console.log(photoPostData);
+        thisApp.doUploadFile("https://www.91shoujike.com/api/photo/upload", 'photo', thisPage.data.photo, photoPostData, function(res) {
+            // console.log(res)
+            thisPage.setData({
+                photoId: res.data.photo_id,
+            });
+        });
+
     },
 
     setPhone: function() {
@@ -201,8 +223,8 @@ Page({
                 title: "正在生成作品"
             });
             var myCanvas = wx.createCanvasContext("myCanvas", this);
-            var drawLeft = 5 * this.data.deltaX + 22; //22
-            var drawTop = 5 * this.data.deltaY + 22; //22
+            var drawLeft = (5 * this.data.deltaX) / globalData.rpxRatio / 2 + 22; //22
+            var drawTop = (5 * this.data.deltaY) / globalData.rpxRatio / 2 + 22; //22
             var dWidth = (5 * this.data.width) / 2;
             var dHeight = (5 * this.data.height) / 2;
             var dx = drawLeft - (dWidth * this.data.scale - dWidth) / 2;
@@ -239,12 +261,30 @@ Page({
                     destHeight: thisPage.data.canvasHeight,
                     canvasId: "myCanvas",
                     success: function(res) {
-                        wx.previewImage({
-                            urls: [ res.tempFilePath ],
-                            current: res.tempFilePath
-                        });
+                        // wx.previewImage({
+                        //     urls: [ res.tempFilePath ],
+                        //     current: res.tempFilePath
+                        // });
 
-                        wx.hideLoading();
+                        thisPage._updatePhotoInfo();
+
+                        //upload blueprint
+                        var postData = {};
+                        postData.phone_id = thisPage.data.phoneId;
+                        postData.photo_id = thisPage.data.photoId;
+                        postData.phone_name = thisPage.data.phoneName;
+                        postData.name = globalData.userInfo.nickName + "的作品";
+                        // console.log(postData);
+                        thisApp.doUploadFile("https://www.91shoujike.com/api/design/upload_blueprint", 'blueprint', res.tempFilePath, postData, function(res) {
+                            // console.log(res)
+                            thisPage.setData({
+                                designId: res.data.design_id,
+                            });
+
+                            thisPage.drawDesignImg();
+                        });
+                        
+                        // wx.hideLoading();
                     }
                 }, thisPage);
             });
@@ -255,15 +295,15 @@ Page({
         });
     },
 
-    genDesignImg: function() {
+    drawDesignImg: function() {
         if ("" != this.data.photo) {
-            wx.showLoading({
-                title: "图片生成中"
-            });
+            // wx.showLoading({
+            //     title: "图片生成中"
+            // });
             var thisPage = this;
             var designCanvas = wx.createCanvasContext("designCanvas", this);
-            var left = this.data.deltaX;
-            var top = this.data.deltaY;
+            var left = this.data.deltaX / globalData.rpxRatio;
+            var top = this.data.deltaY / globalData.rpxRatio;
             var width = this.data.width / 1;
             var height = this.data.height / 1;
             var dx = left - (width * this.data.scale - width) / 2;
@@ -285,13 +325,21 @@ Page({
                     y: 0,
                     width: thisPage.data.maskWidth / 1,
                     height: thisPage.data.maskHeight / 1,
-                    destWidth: thisPage.data.maskWidth / 1 * 2,
-                    destHeight: thisPage.data.maskHeight / 1 * 2,
+                    destWidth: thisPage.data.maskWidth / 1 * 1,
+                    destHeight: thisPage.data.maskHeight / 1 * 1,
                     canvasId: "designCanvas",
                     success: function(res) {
-                        wx.previewImage({
-                            urls: [ res.tempFilePath ],
-                            current: res.tempFilePath
+                        // wx.previewImage({
+                        //     urls: [ res.tempFilePath ],
+                        //     current: res.tempFilePath
+                        // });
+
+                        //upload effect
+                        var postData = {};
+                        postData.design_id = thisPage.data.designId;
+                        thisApp.doUploadFile("https://www.91shoujike.com/api/design/upload_effect", 'effect', res.tempFilePath, postData, function(res) {
+                            //TODO TIP
+                            console.log(res);
                         });
 
                         wx.hideLoading();
@@ -314,6 +362,22 @@ Page({
         canvas.arcTo(left, top, left + width, top, radius), 
         canvas.closePath(), 
         canvas.clip();
+    },
+
+    _updatePhotoInfo: function() {
+        var thisPage = this;
+        var photoPostData = {};
+        photoPostData.photo_id = thisPage.data.photoId;
+        photoPostData.width = thisPage.data.width;
+        photoPostData.height = thisPage.data.height;
+        photoPostData.left = thisPage.data.deltaX;
+        photoPostData.top = thisPage.data.deltaY;
+        photoPostData.angle = thisPage.data.angle;
+        photoPostData.scale = thisPage.data.scale;
+        // console.log(photoPostData);
+        thisApp.callApi("https://www.91shoujike.com/api/photo/update", photoPostData, function(res) {
+            console.log(res);
+        });
     },
 
     ...WxTouch("Touch", {
